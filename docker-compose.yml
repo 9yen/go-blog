@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: go_blog_postgres
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: blog_user
+      POSTGRES_PASSWORD: blog_pass
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: go_blog_redis
+    ports:
+      - "6379:6379"
