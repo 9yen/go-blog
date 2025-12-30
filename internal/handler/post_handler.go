@@ -127,6 +127,36 @@ func (h *PostHandler) GetPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"post": toPostResponse(post)})
 }
 
+func (h *PostHandler) ListPublishedPosts(c *gin.Context) {
+	posts, err := repository.GetPublishedPosts(h.db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch posts"})
+		return
+	}
+
+	var response []PostResponse
+	for _, post := range posts {
+		response = append(response, toPostResponse(&post))
+	}
+
+	c.JSON(http.StatusOK, gin.H{"posts": response})
+}
+
+func (h *PostHandler) ListAllPosts(c *gin.Context) {
+	posts, err := repository.GetAllPosts(h.db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch posts"})
+		return
+	}
+
+	var response []PostResponse
+	for _, post := range posts {
+		response = append(response, toPostResponse(&post))
+	}
+
+	c.JSON(http.StatusOK, gin.H{"posts": response})
+}
+
 func (h *PostHandler) UpdatePost(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 32)
@@ -215,11 +245,13 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 }
 
 func (h *PostHandler) RegisterRoutes(r *gin.RouterGroup) {
+	r.GET("/posts", h.ListAllPosts)
 	r.POST("/posts", h.CreatePost)
 	r.PUT("/posts/:id", h.UpdatePost)
 	r.DELETE("/posts/:id", h.DeletePost)
 }
 
 func (h *PostHandler) RegisterPublicRoutes(r *gin.RouterGroup) {
+	r.GET("/posts", h.ListPublishedPosts)
 	r.GET("/posts/:id", h.GetPost)
 }

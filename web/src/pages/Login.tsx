@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api/client';
+import { setToken } from '../utils/auth';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -16,8 +17,8 @@ export default function Login() {
 
     try {
       const data = await api.login(email, password);
-      localStorage.setItem('token', data.token);
-      navigate('/posts/new');
+      setToken(data.token);
+      navigate('/admin');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
@@ -27,7 +28,10 @@ export default function Login() {
 
   return (
     <div className="page">
-      <h1>Login</h1>
+      <nav className="breadcrumb">
+        <Link to="/">← Back to Blog</Link>
+      </nav>
+      <h1>Admin Login</h1>
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
           <label htmlFor="email">Email</label>

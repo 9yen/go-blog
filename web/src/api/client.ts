@@ -28,9 +28,26 @@ export async function apiFetch<T>(
   return response.json();
 }
 
+export interface Post {
+  id: number;
+  title: string;
+  content: string;
+  author_id: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+}
+
 export const api = {
   login: (email: string, password: string) =>
-    apiFetch<{ token: string; user: { id: number; username: string; email: string; role: string } }>(
+    apiFetch<{ token: string; user: User; message: string }>(
       '/auth/login',
       {
         method: 'POST',
@@ -38,14 +55,31 @@ export const api = {
       }
     ),
 
+  // Public endpoints
+  getPublishedPosts: () =>
+    apiFetch<{ posts: Post[] | null }>('/api/posts'),
+
+  getPost: (id: number) =>
+    apiFetch<{ post: Post }>(`/api/posts/${id}`),
+
+  // Protected endpoints (require auth)
+  getAllPosts: () =>
+    apiFetch<{ posts: Post[] | null }>('/api/posts'),
+
   createPost: (title: string, content: string, status: string) =>
-    apiFetch<{ post: { id: number }; message: string }>('/api/posts', {
+    apiFetch<{ post: Post; message: string }>('/api/posts', {
       method: 'POST',
       body: JSON.stringify({ title, content, status }),
     }),
 
-  getPost: (id: number) =>
-    apiFetch<{ post: { id: number; title: string; content: string; author_id: number; status: string; created_at: string } }>(
-      `/api/posts/${id}`
-    ),
+  updatePost: (id: number, data: { title?: string; content?: string; status?: string }) =>
+    apiFetch<{ post: Post; message: string }>(`/api/posts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  deletePost: (id: number) =>
+    apiFetch<{ message: string }>(`/api/posts/${id}`, {
+      method: 'DELETE',
+    }),
 };

@@ -20,7 +20,23 @@ func GetPostByID(db *gorm.DB, id uint) (*model.Post, error) {
 
 func GetPostsByAuthor(db *gorm.DB, authorID uint) ([]model.Post, error) {
 	var posts []model.Post
-	if err := db.Where("author_id = ?", authorID).Find(&posts).Error; err != nil {
+	if err := db.Where("author_id = ?", authorID).Order("created_at DESC").Find(&posts).Error; err != nil {
+		return nil, err
+	}
+	return posts, nil
+}
+
+func GetPublishedPosts(db *gorm.DB) ([]model.Post, error) {
+	var posts []model.Post
+	if err := db.Where("status = ?", "published").Order("created_at DESC").Find(&posts).Error; err != nil {
+		return nil, err
+	}
+	return posts, nil
+}
+
+func GetAllPosts(db *gorm.DB) ([]model.Post, error) {
+	var posts []model.Post
+	if err := db.Order("created_at DESC").Find(&posts).Error; err != nil {
 		return nil, err
 	}
 	return posts, nil

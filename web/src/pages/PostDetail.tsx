@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { api } from '../api/client';
-
-interface PostData {
-  id: number;
-  title: string;
-  content: string;
-  author_id: number;
-  status: string;
-  created_at: string;
-}
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { api, Post } from '../api/client';
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [post, setPost] = useState<PostData | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -36,18 +27,14 @@ export default function PostDetail() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="page">
-        <p>Loading...</p>
-      </div>
-    );
+    return <div className="page"><p>Loading...</p></div>;
   }
 
   if (error) {
     return (
       <div className="page">
         <p className="error">{error}</p>
-        <button onClick={() => navigate('/')}>Back to Login</button>
+        <button onClick={() => navigate('/')}>Back to Blog</button>
       </div>
     );
   }
@@ -56,27 +43,25 @@ export default function PostDetail() {
     return (
       <div className="page">
         <p>Post not found</p>
-        <button onClick={() => navigate('/')}>Back to Login</button>
+        <button onClick={() => navigate('/')}>Back to Blog</button>
       </div>
     );
   }
 
   return (
     <div className="page">
+      <nav className="breadcrumb">
+        <Link to="/">← Back to Blog</Link>
+      </nav>
       <article className="post-detail">
         <h1>{post.title}</h1>
         <div className="post-meta">
-          <span>Author ID: {post.author_id}</span>
-          <span>Status: {post.status}</span>
-          <span>Created: {new Date(post.created_at).toLocaleString()}</span>
+          <time>{new Date(post.created_at).toLocaleDateString()}</time>
         </div>
         <div className="post-content">
           {post.content}
         </div>
       </article>
-      <div className="actions">
-        <button onClick={() => navigate('/posts/new')}>Create New Post</button>
-      </div>
     </div>
   );
 }

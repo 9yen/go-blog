@@ -127,3 +127,191 @@ button:disabled {
   padding-top: 16px;
   border-top: 1px solid #eee;
 }
+
+/* Blog List */
+.blog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.login-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login-link:hover {
+  color: #4a90d9;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.post-card {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.post-card h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.25rem;
+}
+
+.post-card a {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+.post-card a:hover {
+  color: #4a90d9;
+}
+
+.post-excerpt {
+  color: #666;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.post-date {
+  font-size: 13px;
+  color: #999;
+}
+
+.empty-message {
+  text-align: center;
+  color: #666;
+  padding: 40px 0;
+}
+
+.breadcrumb {
+  margin-bottom: 20px;
+}
+
+.breadcrumb a {
+  color: #4a90d9;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Admin styles */
+.admin-page {
+  max-width: 900px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-toolbar {
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4a90d9;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #3a7bc8;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e9ecef;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #dee2e6;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #4a90d9;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+.btn-danger {
+  color: #dc3545;
+}
+
+.posts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.posts-table th,
+.posts-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.posts-table th {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-published {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-draft {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { api } from '../api/client';
+import { useNavigate, Link } from 'react-router-dom';
+import { api } from '../../api/client';
 
 export default function CreatePost() {
   const navigate = useNavigate();
@@ -9,7 +9,6 @@ export default function CreatePost() {
   const [status, setStatus] = useState('draft');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [createdPostId, setCreatedPostId] = useState<number | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,8 +16,8 @@ export default function CreatePost() {
     setLoading(true);
 
     try {
-      const data = await api.createPost(title, content, status);
-      setCreatedPostId(data.post.id);
+      await api.createPost(title, content, status);
+      navigate('/admin');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create post');
     } finally {
@@ -26,24 +25,12 @@ export default function CreatePost() {
     }
   };
 
-  if (createdPostId) {
-    return (
-      <div className="page">
-        <h1>Post Created!</h1>
-        <p>Post ID: {createdPostId}</p>
-        <button onClick={() => navigate(`/posts/${createdPostId}`)}>
-          View Post
-        </button>
-        <button onClick={() => setCreatedPostId(null)} style={{ marginLeft: '10px' }}>
-          Create Another
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="page">
-      <h1>Create Post</h1>
+      <nav className="breadcrumb">
+        <Link to="/admin">← Back to Dashboard</Link>
+      </nav>
+      <h1>Create New Post</h1>
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -61,7 +48,7 @@ export default function CreatePost() {
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            rows={6}
+            rows={10}
             required
           />
         </div>
@@ -77,9 +64,12 @@ export default function CreatePost() {
           </select>
         </div>
         {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creating...' : 'Create Post'}
-        </button>
+        <div className="form-actions">
+          <button type="submit" disabled={loading}>
+            {loading ? 'Creating...' : 'Create Post'}
+          </button>
+          <Link to="/admin" className="btn-secondary">Cancel</Link>
+        </div>
       </form>
     </div>
   );
