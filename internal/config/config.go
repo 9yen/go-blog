@@ -17,6 +17,8 @@ type Config struct {
 
 	RedisAddr     string
 	RedisPassword string
+
+	JWTSecret string
 }
 
 func Load() *Config {
@@ -42,5 +44,7 @@ func Load() *Config {
 
 		RedisAddr:     viper.GetString("REDIS_ADDR"),
 		RedisPassword: viper.GetString("REDIS_PASSWORD"),
+
+		JWTSecret: viper.GetString("JWT_SECRET"),
 	}
 }

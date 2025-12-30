@@ -1,3 +1,6 @@
 .env
 bin/
 *.log
+internal/.DS_Store
+.idea
+.comate
