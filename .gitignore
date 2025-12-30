@@ -4,3 +4,4 @@ bin/
 internal/.DS_Store
 .idea
 .comate
+web/node_modules
