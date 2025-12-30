@@ -44,11 +44,17 @@ func main() {
 	authGroup := r.Group("/auth")
 	authHandler.RegisterRoutes(authGroup)
 
+	// Public routes
+	postHandler := handler.NewPostHandler(db)
+	publicGroup := r.Group("/api")
+	postHandler.RegisterPublicRoutes(publicGroup)
+
 	// Protected routes
 	userHandler := handler.NewUserHandler(db)
 	apiGroup := r.Group("/api")
 	apiGroup.Use(middleware.AuthMiddleware())
 	apiGroup.GET("/me", userHandler.GetMe)
+	postHandler.RegisterRoutes(apiGroup)
 
 	r.Run(":" + cfg.AppPort)
 }

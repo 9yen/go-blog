@@ -37,8 +37,8 @@ func InitPostgres(cfg *config.Config) (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
-	// Auto-migrate User model
-	if err := db.AutoMigrate(&model.User{}); err != nil {
+	// Auto-migrate models
+	if err := db.AutoMigrate(&model.User{}, &model.Post{}); err != nil {
 		return nil, fmt.Errorf("failed to auto-migrate: %w", err)
 	}
 
