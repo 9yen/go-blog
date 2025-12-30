@@ -114,27 +114,59 @@ Admin accounts are created directly in the database or via a seed script.
 - Node.js 18+
 - Docker & Docker Compose
 
-### 1. Start Database
+### Quick Start (Docker)
+
+The fastest way to run the complete system:
 
 ```bash
+# 1. Clone and configure
+cp .env.example .env
+
+# 2. Start all services (PostgreSQL + Backend)
 docker compose up -d
+
+# 3. Start frontend (separate terminal)
+cd web && npm install && npm run dev
 ```
 
-### 2. Configure Environment
+**Default admin credentials** (auto-created on first startup):
+- Email: `admin@example.com`
+- Password: `admin123`
 
-Create `.env` in project root:
+Open `http://localhost:3000` and login to start using the system.
+
+> ⚠️ **Note**: Admin seeding is enabled by default in Docker for demo purposes. Disable `SEED_ADMIN` in production.
+
+---
+
+### Manual Setup (Development)
+
+#### 1. Start Database
+
+```bash
+docker compose up postgres -d
+```
+
+#### 2. Configure Environment
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` for local development:
 
 ```env
 APP_PORT=8080
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=go_blog
+DB_USER=blog_user
+DB_PASSWORD=blog_pass
+DB_NAME=blog
 JWT_SECRET=your-secret-key
+SEED_ADMIN=true
 ```
 
-### 3. Run Backend
+#### 3. Run Backend
 
 ```bash
 go run cmd/server/main.go
@@ -142,7 +174,7 @@ go run cmd/server/main.go
 
 Backend runs at: `http://localhost:8080`
 
-### 4. Run Frontend
+#### 4. Run Frontend
 
 ```bash
 cd web
@@ -152,7 +184,24 @@ npm run dev
 
 Frontend runs at: `http://localhost:3000`
 
-### 5. Create Admin User
+---
+
+### Admin User Setup
+
+**Option A: Automatic Seeding (Recommended for Demo)**
+
+When `SEED_ADMIN=true`, the application automatically creates an admin user on startup:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SEED_ADMIN` | `false` | Enable/disable auto-seeding |
+| `SEED_ADMIN_USER` | `admin` | Username |
+| `SEED_ADMIN_EMAIL` | `admin@example.com` | Email (login) |
+| `SEED_ADMIN_PASS` | `admin123` | Password |
+
+The seed is **idempotent** — running multiple times will not create duplicate users.
+
+**Option B: Manual Creation**
 
 Connect to PostgreSQL and insert a user (password is bcrypt-hashed):
 
@@ -160,8 +209,6 @@ Connect to PostgreSQL and insert a user (password is bcrypt-hashed):
 INSERT INTO users (username, email, password_hash, role, created_at, updated_at)
 VALUES ('admin', 'admin@example.com', '$2a$10$...', 'admin', NOW(), NOW());
 ```
-
-Or use a Go script to generate the hash.
 
 ## Project Structure
 

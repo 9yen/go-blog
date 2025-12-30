@@ -8,6 +8,7 @@ import (
 	"go-blog/internal/database"
 	"go-blog/internal/handler"
 	"go-blog/internal/middleware"
+	"go-blog/internal/seed"
 	"go-blog/internal/utils"
 
 	"github.com/gin-gonic/gin"
@@ -30,6 +31,11 @@ func main() {
 
 	sqlDB, _ := db.DB()
 	defer sqlDB.Close()
+
+	// Seed admin user (for development/demo only)
+	if err := seed.SeedAdmin(db, cfg); err != nil {
+		log.Printf("Warning: Failed to seed admin user: %v", err)
+	}
 
 	r := gin.Default()
 

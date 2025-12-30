@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	AppPort string
+	AppEnv  string
 
 	DBHost     string
 	DBPort     string
@@ -19,6 +20,12 @@ type Config struct {
 	RedisPassword string
 
 	JWTSecret string
+
+	// Admin seed settings
+	SeedAdmin      bool
+	SeedAdminUser  string
+	SeedAdminEmail string
+	SeedAdminPass  string
 }
 
 func Load() *Config {
@@ -33,8 +40,15 @@ func Load() *Config {
 		log.Println("no .env file found, using environment variables")
 	}
 
+	// Set defaults for seed admin
+	viper.SetDefault("SEED_ADMIN", false)
+	viper.SetDefault("SEED_ADMIN_USER", "admin")
+	viper.SetDefault("SEED_ADMIN_EMAIL", "admin@example.com")
+	viper.SetDefault("SEED_ADMIN_PASS", "admin123")
+
 	return &Config{
 		AppPort: viper.GetString("APP_PORT"),
+		AppEnv:  viper.GetString("APP_ENV"),
 
 		DBHost:     viper.GetString("DB_HOST"),
 		DBPort:     viper.GetString("DB_PORT"),
@@ -46,5 +60,10 @@ func Load() *Config {
 		RedisPassword: viper.GetString("REDIS_PASSWORD"),
 
 		JWTSecret: viper.GetString("JWT_SECRET"),
+
+		SeedAdmin:      viper.GetBool("SEED_ADMIN"),
+		SeedAdminUser:  viper.GetString("SEED_ADMIN_USER"),
+		SeedAdminEmail: viper.GetString("SEED_ADMIN_EMAIL"),
+		SeedAdminPass:  viper.GetString("SEED_ADMIN_PASS"),
 	}
 }
